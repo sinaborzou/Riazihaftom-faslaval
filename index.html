@@ -1,0 +1,713 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>sasuke24</title>
+  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+  <script src="https://cdn.jsdelivr.net/npm/lucide@0.263.0/dist/umd/lucide.min.js"></script>
+  
+  <style>
+        :root {
+            --primary: #6366f1;
+            --primary-dark: #4f46e5;
+            --accent: #f59e0b;
+            --success: #10b981;
+            --danger: #ef4444;
+            --bg: #f0f4ff;
+            --card: #ffffff;
+            --text: #1e293b;
+            --text-muted: #64748b;
+            --nav-bg: #1e1b4b;
+        }
+        .dark {
+            --bg: #0f172a;
+            --card: #1e293b;
+            --text: #e2e8f0;
+            --text-muted: #94a3b8;
+            --nav-bg: #020617;
+        }
+        body {
+            font-family: system-ui, -apple-system, 'Segoe UI', Tahoma, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            transition: background 0.3s, color 0.3s;
+            min-height: calc(100 * min(var(--vh, 1vh), 1vh));
+        }
+        .module-card {
+            background: var(--card);
+            border-radius: 1rem;
+            padding: 1.5rem;
+            box-shadow: 0 4px 24px rgba(99,102,241,0.08);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .module-card:hover { transform: translateY(-2px); box-shadow: 0 8px 32px rgba(99,102,241,0.15); }
+        .nav-btn {
+            width: 48px; height: 48px; border-radius: 12px;
+            display: flex; align-items: center; justify-content: center;
+            font-weight: 700; font-size: 14px; cursor: pointer;
+            border: none; color: #fff; transition: all 0.2s;
+        }
+        .nav-btn:hover, .nav-btn.active { background: var(--primary) !important; transform: scale(1.1); }
+        .nav-btn:focus { outline: 3px solid var(--accent); outline-offset: 2px; }
+        .btn {
+            padding: 0.6rem 1.2rem; border-radius: 0.75rem; font-weight: 600;
+            cursor: pointer; border: none; transition: all 0.2s; font-size: 0.9rem;
+        }
+        .btn-primary { background: var(--primary); color: #fff; }
+        .btn-primary:hover { background: var(--primary-dark); }
+        .btn-success { background: var(--success); color: #fff; }
+        .btn-danger { background: var(--danger); color: #fff; }
+        .btn-accent { background: var(--accent); color: #1e293b; }
+        .progress-strip {
+            display: flex; gap: 1rem; align-items: center; flex-wrap: wrap;
+            padding: 0.75rem 1rem; background: var(--card); border-radius: 1rem;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.05);
+        }
+        .stat-badge {
+            display: inline-flex; align-items: center; gap: 0.3rem;
+            padding: 0.3rem 0.7rem; border-radius: 2rem; font-size: 0.8rem; font-weight: 600;
+        }
+        input[type="range"] { width: 100%; accent-color: var(--primary); }
+        input[type="number"], input[type="text"] {
+            padding: 0.5rem 0.8rem; border-radius: 0.5rem; border: 2px solid #e2e8f0;
+            background: var(--card); color: var(--text); font-size: 1rem; direction: ltr; text-align: center;
+        }
+        .confetti { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 9999; }
+        .module-panel { display: none; animation: fadeIn 0.3s ease; }
+        .module-panel.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .toolbar-btn {
+            width: 40px; height: 40px; border-radius: 10px; border: none;
+            background: rgba(255,255,255,0.15); color: #fff; cursor: pointer;
+            display: flex; align-items: center; justify-content: center; font-size: 1.2rem;
+            transition: background 0.2s;
+        }
+        .toolbar-btn:hover { background: rgba(255,255,255,0.3); }
+        .balance-scale { display: flex; align-items: flex-end; justify-content: center; gap: 2rem; margin: 1rem 0; }
+        .scale-side { text-align: center; padding: 1rem; border-radius: 0.75rem; min-width: 120px; font-size: 1.2rem; font-weight: 700; }
+        @media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; } }
+    </style>
+  <script src="https://cdn.jsdelivr.net/npm/lucide@0.263.0/dist/umd/lucide.min.js" type="text/javascript"></script>
+  <script src="/_sdk/935a53bc2e11fb8d.data_sdk.js" type="text/javascript" integrity="sha512-qr2oyPnEys1WebcOABaRh6hG77r5PWpqeWW6JTKbRJqly/INsfBi31CVNlTmHqjgeLpkVmmHZJUdxSx/32tOFQ=="></script>
+  <script src="/_sdk/6030e540d4419216.resizing_sdk.js" type="text/javascript" integrity="sha512-b5KWzyoXsbWP4smq4sftIi6Kts4YVBpBsz0BwCViwbBJkK64a3/Z6ZMdWA+qnplNcXw4mhZeqvQi3mOosiRJdA=="></script>
+ </head>
+ <body data-template-id="__page-root" class="w-full" style="background: rgb(240, 244, 255);"><!-- Top Toolbar -->
+  <header data-template-id="toolbar" class="canva-header sticky top-0 z-50 flex items-center justify-between px-4 py-2" style="background: rgb(30, 27, 75);">
+   <h1 data-template-id="app-title" class="canva-text text-white font-bold text-lg" style="color: rgb(255, 255, 255); font-weight: bold;">🧮 آزمایشگاه مجازی جبر</h1>
+   <div class="flex gap-2"><button class="toolbar-btn" onclick="toggleDark()" title="حالت تیره (D)" aria-label="تغییر حالت تیره">🌙</button> <button class="toolbar-btn" onclick="toggleSound()" id="soundBtn" title="صدا (S)" aria-label="صدا">🔊</button> <button class="toolbar-btn" onclick="toggleFullscreen()" title="تمام صفحه (F)" aria-label="تمام صفحه">⛶</button> <button class="toolbar-btn" onclick="showHelp()" title="راهنما (H)" aria-label="راهنما">❓</button> <button class="toolbar-btn" onclick="resetSession()" title="بازنشانی (R)" aria-label="بازنشانی">🔄</button>
+   </div>
+  </header>
+  <div class="flex flex-col md:flex-row w-full"><!-- Navigation Rail -->
+   <nav class="flex md:flex-col gap-2 p-2 overflow-x-auto md:overflow-y-auto md:w-16 shrink-0" style="background: var(--nav-bg);" aria-label="ماژول‌ها"><button class="nav-btn active" onclick="showModule(0)" style="background:#6366f1" aria-label="ماژول ۱">۱</button> <button class="nav-btn" onclick="showModule(1)" style="background:#475569" aria-label="ماژول ۲">۲</button> <button class="nav-btn" onclick="showModule(2)" style="background:#475569" aria-label="ماژول ۳">۳</button> <button class="nav-btn" onclick="showModule(3)" style="background:#475569" aria-label="ماژول ۴">۴</button> <button class="nav-btn" onclick="showModule(4)" style="background:#475569" aria-label="ماژول ۵">۵</button> <button class="nav-btn" onclick="showModule(5)" style="background:#475569" aria-label="ماژول ۶">۶</button> <button class="nav-btn" onclick="showModule(6)" style="background:#475569" aria-label="ماژول ۷">۷</button> <button class="nav-btn" onclick="showModule(7)" style="background:#475569" aria-label="ماژول ۸">۸</button> <button class="nav-btn" onclick="showModule(8)" style="background:#475569" aria-label="ماژول ۹">۹</button> <button class="nav-btn" onclick="showModule(9)" style="background:#475569" aria-label="ماژول ۱۰">۱۰</button> <button class="nav-btn" onclick="showModule(10)" style="background:#475569" aria-label="ماژول ۱۱">۱۱</button> <button class="nav-btn" onclick="showModule(11)" style="background:#475569" aria-label="ماژول ۱۲">۱۲</button> <button class="nav-btn" onclick="showModule(12)" style="background:#475569" aria-label="ماژول ۱۳">۱۳</button> <button class="nav-btn" onclick="showModule(13)" style="background:#475569" aria-label="ماژول ۱۴">۱۴</button> <button class="nav-btn" onclick="showModule(14)" style="background:#475569" aria-label="ماژول ۱۵">۱۵</button>
+   </nav><!-- Main Content -->
+   <main class="flex-1 p-4 md:p-6 max-w-5xl mx-auto w-full"><!-- Progress Strip -->
+    <div class="progress-strip mb-4" aria-live="polite"><span class="stat-badge" style="background:#fef3c7;color:#92400e;">⭐ <span id="stars">0</span></span> <span class="stat-badge" style="background:#dbeafe;color:#1e40af;">امتیاز: <span id="score">0</span></span> <span class="stat-badge" style="background:#d1fae5;color:#065f46;">✓ <span id="correct">0</span></span> <span class="stat-badge" style="background:#fee2e2;color:#991b1b;">✗ <span id="wrong">0</span></span> <span class="stat-badge" style="background:#e0e7ff;color:#3730a3;">سطح: <span id="level">1</span></span>
+    </div><!-- Module 1: Vocabulary -->
+    <section class="module-panel active" id="mod0">
+     <div class="module-card">
+      <h2 class="text-xl font-bold mb-4" style="color:var(--primary);">📖 واژگان جبر</h2>
+      <div id="vocabCards" class="grid grid-cols-1 sm:grid-cols-2 gap-3"></div>
+     </div>
+    </section><!-- Module 2: Number Patterns -->
+    <section class="module-panel" id="mod1">
+     <div class="module-card">
+      <h2 class="text-xl font-bold mb-4" style="color:var(--primary);">🔢 الگوی عددی</h2>
+      <p class="mb-3" style="color:var(--text-muted);">عدد بعدی الگو را پیدا کنید:</p>
+      <div id="patternDisplay" class="text-2xl font-bold mb-3" dir="ltr" style="text-align:center;"></div>
+      <div class="flex gap-2 items-center justify-center flex-wrap"><input type="number" id="patternAnswer" placeholder="؟" class="w-20"> <button class="btn btn-primary" onclick="checkPattern()">بررسی</button> <button class="btn btn-accent" onclick="newPattern()">سؤال جدید</button>
+      </div>
+      <p id="patternFeedback" class="mt-3 text-center font-bold" aria-live="polite"></p>
+     </div>
+    </section><!-- Module 3: Variables -->
+    <section class="module-panel" id="mod2">
+     <div class="module-card">
+      <h2 class="text-xl font-bold mb-4" style="color:var(--primary);">🔤 درک متغیر</h2>
+      <p class="mb-3">مقدار x را تغییر دهید و نتیجه را ببینید:</p>
+      <div class="text-center text-2xl font-bold mb-2" id="varExpr">
+       x + 3
+      </div>
+      <div class="flex items-center justify-center gap-3"><label for="varSlider">x =</label> <input type="range" id="varSlider" min="0" max="20" value="5" oninput="updateVar()" class="w-48"> <span id="varVal" class="font-bold text-lg">5</span>
+      </div>
+      <div class="text-center text-3xl font-bold mt-3" style="color:var(--success);" id="varResult">
+       = 8
+      </div>
+      <div class="flex gap-2 justify-center mt-3 flex-wrap"><button class="btn btn-accent" onclick="changeVarExpr(0)">x+3</button> <button class="btn btn-accent" onclick="changeVarExpr(1)">5x</button> <button class="btn btn-accent" onclick="changeVarExpr(2)">2x−7</button> <button class="btn btn-accent" onclick="changeVarExpr(3)">3x+4</button>
+      </div>
+     </div>
+    </section><!-- Module 4: Algebraic Expressions -->
+    <section class="module-panel" id="mod3">
+     <div class="module-card">
+      <h2 class="text-xl font-bold mb-4" style="color:var(--primary);">📝 عبارت جبری</h2>
+      <p class="mb-3">جمله فارسی را به عبارت جبری تبدیل کنید:</p>
+      <div id="exprPrompt" class="text-lg font-bold mb-3 p-3 rounded-lg" style="background:var(--bg);"></div>
+      <div class="flex gap-2 flex-wrap justify-center" id="exprChoices"></div>
+      <p id="exprFeedback" class="mt-3 text-center font-bold" aria-live="polite"></p><button class="btn btn-accent mt-3" onclick="newExprQ()">سؤال بعدی</button>
+     </div>
+    </section><!-- Module 5: Evaluating -->
+    <section class="module-panel" id="mod4">
+     <div class="module-card">
+      <h2 class="text-xl font-bold mb-4" style="color:var(--primary);">🧮 محاسبه عبارت</h2>
+      <div class="text-center text-xl font-bold mb-2">
+       عبارت: <span id="evalExpr" dir="ltr">2x + 5</span>
+      </div>
+      <div class="flex items-center justify-center gap-3 mb-3"><label for="evalSlider">x =</label> <input type="range" id="evalSlider" min="0" max="15" value="3" oninput="evalUpdate()" class="w-48"> <span id="evalX" class="font-bold">3</span>
+      </div>
+      <div id="evalSteps" class="p-3 rounded-lg" style="background:var(--bg); direction:ltr; text-align:center;"></div>
+     </div>
+    </section><!-- Module 6: Like Terms -->
+    <section class="module-panel" id="mod5">
+     <div class="module-card">
+      <h2 class="text-xl font-bold mb-4" style="color:var(--primary);">🎨 جمله‌های مشابه</h2>
+      <p class="mb-3">عبارت زیر را ساده کنید:</p>
+      <div id="likeTermQ" class="text-2xl font-bold text-center mb-3" dir="ltr"></div>
+      <div class="flex gap-2 items-center justify-center"><input type="text" id="likeTermAns" placeholder="جواب" class="w-32" dir="ltr"> <button class="btn btn-primary" onclick="checkLikeTerms()">بررسی</button> <button class="btn btn-accent" onclick="newLikeTerms()">جدید</button>
+      </div>
+      <p id="likeFeedback" class="mt-3 text-center font-bold" aria-live="polite"></p>
+     </div>
+    </section><!-- Module 7: Distributive -->
+    <section class="module-panel" id="mod6">
+     <div class="module-card">
+      <h2 class="text-xl font-bold mb-4" style="color:var(--primary);">✖️ ضرب در پرانتز</h2>
+      <div id="distExpr" class="text-2xl font-bold text-center mb-3" dir="ltr"></div>
+      <div id="distSteps" class="p-3 rounded-lg mb-3" style="background:var(--bg); direction:ltr; text-align:center;"></div>
+      <div class="flex gap-2 items-center justify-center"><input type="text" id="distAns" placeholder="جواب" class="w-40" dir="ltr"> <button class="btn btn-primary" onclick="checkDist()">بررسی</button> <button class="btn btn-accent" onclick="newDist()">جدید</button>
+      </div>
+      <p id="distFeedback" class="mt-3 text-center font-bold" aria-live="polite"></p>
+     </div>
+    </section><!-- Module 8: Building Equations -->
+    <section class="module-panel" id="mod7">
+     <div class="module-card">
+      <h2 class="text-xl font-bold mb-4" style="color:var(--primary);">🏗️ ساختن معادله</h2>
+      <p id="buildPrompt" class="mb-3 text-lg"></p>
+      <div class="flex gap-2 flex-wrap justify-center" id="buildChoices"></div>
+      <p id="buildFeedback" class="mt-3 text-center font-bold" aria-live="polite"></p><button class="btn btn-accent mt-3" onclick="newBuildEq()">سؤال جدید</button>
+     </div>
+    </section><!-- Module 9: Solving Equations (Balance) -->
+    <section class="module-panel" id="mod8">
+     <div class="module-card">
+      <h2 class="text-xl font-bold mb-4" style="color:var(--primary);">⚖️ حل معادله</h2>
+      <div id="eqDisplay" class="text-2xl font-bold text-center mb-3" dir="ltr"></div>
+      <div class="balance-scale">
+       <div class="scale-side" style="background:#dbeafe;" id="leftSide"></div>
+       <div style="font-size:2rem;">
+        ⚖️
+       </div>
+       <div class="scale-side" style="background:#fef3c7;" id="rightSide"></div>
+      </div>
+      <div class="flex gap-2 items-center justify-center flex-wrap mt-3"><input type="number" id="eqAnswer" placeholder="x = ?" class="w-24"> <button class="btn btn-primary" onclick="checkEq()">بررسی</button> <button class="btn btn-accent" onclick="newEq()">جدید</button>
+      </div>
+      <p id="eqFeedback" class="mt-3 text-center font-bold" aria-live="polite"></p>
+     </div>
+    </section><!-- Module 10: Guess and Check -->
+    <section class="module-panel" id="mod9">
+     <div class="module-card">
+      <h2 class="text-xl font-bold mb-4" style="color:var(--primary);">🎯 حدس بزن</h2>
+      <div id="guessEq" class="text-2xl font-bold text-center mb-3" dir="ltr"></div>
+      <div class="flex gap-2 items-center justify-center"><input type="number" id="guessInput" placeholder="x = ?" class="w-24"> <button class="btn btn-primary" onclick="checkGuess()">حدس</button> <button class="btn btn-accent" onclick="newGuess()">جدید</button>
+      </div>
+      <p id="guessHint" class="mt-3 text-center text-lg font-bold" aria-live="polite"></p>
+      <p class="text-center mt-1" style="color:var(--text-muted);">تلاش: <span id="guessAttempts">0</span></p>
+     </div>
+    </section><!-- Module 11: Perimeter & Area -->
+    <section class="module-panel" id="mod10">
+     <div class="module-card">
+      <h2 class="text-xl font-bold mb-4" style="color:var(--primary);">📐 محیط و مساحت</h2>
+      <p class="mb-2">طول = x + 3 ، عرض = 5</p>
+      <div class="flex items-center justify-center gap-3 mb-3"><label for="areaSlider">x =</label> <input type="range" id="areaSlider" min="0" max="15" value="4" oninput="updateArea()" class="w-48"> <span id="areaX" class="font-bold">4</span>
+      </div>
+      <div class="flex gap-4 justify-center flex-wrap">
+       <div class="p-3 rounded-lg text-center" style="background:#dbeafe;">
+        <strong>طول:</strong> <span id="areaL">7</span>
+       </div>
+       <div class="p-3 rounded-lg text-center" style="background:#d1fae5;">
+        <strong>محیط:</strong> <span id="areaP">24</span>
+       </div>
+       <div class="p-3 rounded-lg text-center" style="background:#fef3c7;">
+        <strong>مساحت:</strong> <span id="areaA">35</span>
+       </div>
+      </div>
+      <div class="flex justify-center mt-3">
+       <svg width="200" height="120" id="rectSvg">
+        <rect x="10" y="10" width="180" height="100" fill="none" stroke="#6366f1" stroke-width="3" rx="4"></rect><text x="100" y="65" text-anchor="middle" fill="#6366f1" font-size="14" id="rectLabel">
+         7 × 5
+        </text>
+       </svg>
+      </div>
+     </div>
+    </section><!-- Module 12: Mixed Practice -->
+    <section class="module-panel" id="mod11">
+     <div class="module-card">
+      <h2 class="text-xl font-bold mb-4" style="color:var(--primary);">🎲 تمرین ترکیبی</h2>
+      <div id="mixedQ" class="text-lg font-bold mb-3 p-3 rounded-lg" style="background:var(--bg);"></div>
+      <div class="flex gap-2 items-center justify-center"><input type="text" id="mixedAns" placeholder="جواب" class="w-40" dir="ltr"> <button class="btn btn-primary" onclick="checkMixed()">بررسی</button> <button class="btn btn-accent" onclick="newMixed()">جدید</button>
+      </div>
+      <p id="mixedFeedback" class="mt-3 text-center font-bold" aria-live="polite"></p>
+     </div>
+    </section><!-- Module 13: Teacher Dashboard -->
+    <section class="module-panel" id="mod12">
+     <div class="module-card">
+      <h2 class="text-xl font-bold mb-4" style="color:var(--primary);">👩‍🏫 داشبورد معلم</h2>
+      <div class="flex gap-2 flex-wrap mb-3"><button class="btn btn-primary" onclick="teacherGenerate()">سؤال جدید</button> <button class="btn btn-success" onclick="teacherShowAnswer()">نمایش جواب</button> <button class="btn btn-danger" onclick="teacherHideAnswer()">پنهان جواب</button>
+      </div>
+      <div id="teacherQ" class="text-xl font-bold p-4 rounded-lg mb-3" style="background:var(--bg);"></div>
+      <div id="teacherA" class="text-xl font-bold p-4 rounded-lg hidden" style="background:#d1fae5; color:#065f46;"></div>
+     </div>
+    </section><!-- Module 14: Progress -->
+    <section class="module-panel" id="mod13">
+     <div class="module-card">
+      <h2 class="text-xl font-bold mb-4" style="color:var(--primary);">📊 پیشرفت</h2>
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 text-center">
+       <div class="p-3 rounded-lg" style="background:#fef3c7;">
+        <div class="text-2xl">
+         ⭐
+        </div>
+        <div id="pStars" class="font-bold text-xl">
+         0
+        </div>
+        <div style="color:var(--text-muted);">
+         ستاره
+        </div>
+       </div>
+       <div class="p-3 rounded-lg" style="background:#dbeafe;">
+        <div class="text-2xl">
+         🏆
+        </div>
+        <div id="pScore" class="font-bold text-xl">
+         0
+        </div>
+        <div style="color:var(--text-muted);">
+         امتیاز
+        </div>
+       </div>
+       <div class="p-3 rounded-lg" style="background:#d1fae5;">
+        <div class="text-2xl">
+         ✓
+        </div>
+        <div id="pCorrect" class="font-bold text-xl">
+         0
+        </div>
+        <div style="color:var(--text-muted);">
+         درست
+        </div>
+       </div>
+       <div class="p-3 rounded-lg" style="background:#fee2e2;">
+        <div class="text-2xl">
+         ✗
+        </div>
+        <div id="pWrong" class="font-bold text-xl">
+         0
+        </div>
+        <div style="color:var(--text-muted);">
+         نادرست
+        </div>
+       </div>
+      </div>
+      <div class="mt-4 p-3 rounded-lg" style="background:var(--bg);">
+       <div class="flex justify-between mb-1">
+        <span>پیشرفت کلی</span><span id="pPct">0%</span>
+       </div>
+       <div style="background:#e2e8f0; border-radius:1rem; height:12px; overflow:hidden;">
+        <div id="pBar" style="background:var(--primary); height:100%; width:0%; transition:width 0.5s; border-radius:1rem;"></div>
+       </div>
+      </div>
+     </div>
+    </section><!-- Module 15: Gamification -->
+    <section class="module-panel" id="mod14">
+     <div class="module-card">
+      <h2 class="text-xl font-bold mb-4" style="color:var(--primary);">🏅 دستاوردها</h2>
+      <div id="badges" class="flex gap-3 flex-wrap"></div>
+      <p class="mt-3" style="color:var(--text-muted);">با حل سؤالات بیشتر، نشان‌های جدید کسب کنید!</p>
+     </div>
+    </section>
+   </main>
+  </div><!-- Help Modal -->
+  <div id="helpModal" class="fixed inset-0 z-[100] hidden flex items-center justify-center" style="background:rgba(0,0,0,0.5);">
+   <div class="module-card max-w-md w-full mx-4 max-h-[80vh] overflow-y-auto">
+    <h2 class="text-xl font-bold mb-3">❓ راهنما</h2>
+    <ul class="space-y-1 text-sm" style="color:var(--text-muted);">
+     <li><strong>D</strong> — حالت تیره</li>
+     <li><strong>F</strong> — تمام صفحه</li>
+     <li><strong>S</strong> — صدا</li>
+     <li><strong>H</strong> — راهنما</li>
+     <li><strong>R</strong> — بازنشانی</li>
+     <li><strong>1-9, 0</strong> — ماژول ۱ تا ۱۰</li>
+     <li><strong>Esc</strong> — بستن پنل</li>
+    </ul><button class="btn btn-primary mt-4" onclick="closeHelp()">بستن</button>
+   </div>
+  </div><!-- Confetti Canvas -->
+  <canvas id="confettiCanvas" class="confetti hidden"></canvas>
+  <footer data-template-id="footer" class="canva-footer text-center p-3 text-sm" style="color: var(--text-muted); background: transparent;"><span data-template-id="footer-text" class="canva-text" style="color: rgb(100, 116, 139);">آزمایشگاه مجازی جبر — ویژه دانش‌آموزان پایه هفتم و هشتم</span>
+  </footer>
+  <div aria-live="polite" id="ariaLive" class="sr-only" style="position:absolute;width:1px;height:1px;overflow:hidden;"></div>
+  <script>
+    // === STATE ===
+    let state = JSON.parse(localStorage.getItem('algebraLab') || 'null') || {
+        module: 0, dark: false, sound: true, score: 0, stars: 0,
+        correct: 0, wrong: 0, level: 1, badges: []
+    };
+
+    // === AUDIO ===
+    let audioCtx;
+    function getAudio() { if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)(); return audioCtx; }
+    function playTone(freq, dur, type='sine') {
+        if (!state.sound) return;
+        try {
+            const ctx = getAudio(); const o = ctx.createOscillator(); const g = ctx.createGain();
+            o.type = type; o.frequency.value = freq; g.gain.value = 0.15;
+            o.connect(g); g.connect(ctx.destination); o.start(); g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + dur); o.stop(ctx.currentTime + dur);
+        } catch(e) {}
+    }
+    function sndCorrect() { playTone(523, 0.15); setTimeout(() => playTone(659, 0.15), 100); }
+    function sndWrong() { playTone(200, 0.3, 'sawtooth'); }
+    function sndClick() { playTone(440, 0.05); }
+
+    // === HELPERS ===
+    function save() { localStorage.setItem('algebraLab', JSON.stringify(state)); }
+    function announce(msg) { document.getElementById('ariaLive').textContent = msg; }
+    function updateStats() {
+        document.getElementById('stars').textContent = state.stars;
+        document.getElementById('score').textContent = state.score;
+        document.getElementById('correct').textContent = state.correct;
+        document.getElementById('wrong').textContent = state.wrong;
+        document.getElementById('level').textContent = state.level;
+        // Progress module
+        document.getElementById('pStars').textContent = state.stars;
+        document.getElementById('pScore').textContent = state.score;
+        document.getElementById('pCorrect').textContent = state.correct;
+        document.getElementById('pWrong').textContent = state.wrong;
+        const pct = state.correct + state.wrong > 0 ? Math.round(state.correct / (state.correct + state.wrong) * 100) : 0;
+        document.getElementById('pPct').textContent = pct + '%';
+        document.getElementById('pBar').style.width = pct + '%';
+        state.level = 1 + Math.floor(state.stars / 5);
+        save();
+    }
+    function addCorrect() { state.correct++; state.score += 10; state.stars++; updateStats(); sndCorrect(); checkBadges(); }
+    function addWrong() { state.wrong++; updateStats(); sndWrong(); }
+    function rand(a, b) { return Math.floor(Math.random() * (b - a + 1)) + a; }
+    function pick(arr) { return arr[rand(0, arr.length - 1)]; }
+
+    // === MODULES NAVIGATION ===
+    function showModule(i) {
+        sndClick();
+        state.module = i; save();
+        document.querySelectorAll('.module-panel').forEach((el, idx) => {
+            el.classList.toggle('active', idx === i);
+        });
+        document.querySelectorAll('.nav-btn').forEach((btn, idx) => {
+            btn.classList.toggle('active', idx === i);
+            btn.style.background = idx === i ? '#6366f1' : '#475569';
+        });
+    }
+
+    // === TOOLBAR ===
+    function toggleDark() { state.dark = !state.dark; document.body.classList.toggle('dark', state.dark); save(); }
+    function toggleSound() { state.sound = !state.sound; document.getElementById('soundBtn').textContent = state.sound ? '🔊' : '🔇'; save(); }
+    function toggleFullscreen() { if (!document.fullscreenElement) document.documentElement.requestFullscreen?.(); else document.exitFullscreen?.(); }
+    function showHelp() { document.getElementById('helpModal').classList.remove('hidden'); }
+    function closeHelp() { document.getElementById('helpModal').classList.add('hidden'); }
+    function resetSession() { if (state.score > 0) { state = { module: 0, dark: false, sound: true, score: 0, stars: 0, correct: 0, wrong: 0, level: 1, badges: [] }; save(); updateStats(); renderBadges(); announce('جلسه بازنشانی شد'); } }
+
+    // === KEYBOARD ===
+    document.addEventListener('keydown', e => {
+        if (e.target.tagName === 'INPUT') return;
+        const k = e.key.toLowerCase();
+        if (k === 'd') toggleDark();
+        else if (k === 'f') toggleFullscreen();
+        else if (k === 's') toggleSound();
+        else if (k === 'h') showHelp();
+        else if (k === 'r') resetSession();
+        else if (k === 'escape') closeHelp();
+        else if (k >= '1' && k <= '9') showModule(parseInt(k) - 1);
+        else if (k === '0') showModule(9);
+    });
+
+    // === MODULE 1: VOCABULARY ===
+    const vocabData = [
+        { term: 'معادله', def: 'عبارتی که دو طرف مساوی دارد', ex: 'x+2=5' },
+        { term: 'متغیر', def: 'نمادی به جای عدد ناشناخته', ex: 'x, y, a' },
+        { term: 'عبارت جبری', def: 'ترکیبی از اعداد، متغیرها و عملیات', ex: '3x+2' },
+        { term: 'جمله', def: 'هر بخش جدا شده با + یا −', ex: 'در 2x+3 → دو جمله' },
+        { term: 'جمله‌های مشابه', def: 'جمله‌هایی با متغیر یکسان', ex: '3x و 5x' },
+        { term: 'الگوی عددی', def: 'دنباله‌ای با قاعده مشخص', ex: '2,4,6,8,...' },
+        { term: 'جواب معادله', def: 'عددی که معادله را برقرار می‌کند', ex: 'x=3 در x+2=5' },
+    ];
+    function renderVocab() {
+        const c = document.getElementById('vocabCards');
+        c.innerHTML = vocabData.map((v, i) => `
+            <div class="p-3 rounded-lg cursor-pointer" style="background:var(--bg); border:2px solid transparent;" onclick="this.querySelector('.vocab-detail').classList.toggle('hidden')" tabindex="0" role="button" aria-expanded="false">
+                <div class="font-bold text-lg" style="color:var(--primary);">${v.term}</div>
+                <div class="vocab-detail hidden mt-2 text-sm space-y-1">
+                    <p>${v.def}</p>
+                    <p dir="ltr" class="font-mono" style="color:var(--accent);">${v.ex}</p>
+                </div>
+            </div>`).join('');
+    }
+
+    // === MODULE 2: PATTERNS ===
+    let patternData = {};
+    function newPattern() {
+        const start = rand(1, 5); const step = rand(2, 7);
+        const seq = Array.from({length: 5}, (_, i) => start + step * i);
+        patternData = { seq, answer: start + step * 5 };
+        document.getElementById('patternDisplay').textContent = seq.join(' , ') + ' , ?';
+        document.getElementById('patternFeedback').textContent = '';
+        document.getElementById('patternAnswer').value = '';
+    }
+    function checkPattern() {
+        const ans = parseInt(document.getElementById('patternAnswer').value);
+        const fb = document.getElementById('patternFeedback');
+        if (ans === patternData.answer) { fb.textContent = '✅ آفرین!'; fb.style.color = 'var(--success)'; addCorrect(); }
+        else { fb.textContent = '❌ جواب: ' + patternData.answer; fb.style.color = 'var(--danger)'; addWrong(); }
+    }
+
+    // === MODULE 3: VARIABLES ===
+    const varExprs = [
+        { label: 'x+3', fn: x => x + 3 },
+        { label: '5x', fn: x => 5 * x },
+        { label: '2x−7', fn: x => 2 * x - 7 },
+        { label: '3x+4', fn: x => 3 * x + 4 },
+    ];
+    let currentVarExpr = 0;
+    function changeVarExpr(i) { currentVarExpr = i; document.getElementById('varExpr').textContent = varExprs[i].label; updateVar(); }
+    function updateVar() {
+        const x = parseInt(document.getElementById('varSlider').value);
+        document.getElementById('varVal').textContent = x;
+        document.getElementById('varResult').textContent = '= ' + varExprs[currentVarExpr].fn(x);
+    }
+
+    // === MODULE 4: EXPRESSIONS ===
+    const exprQs = [
+        { q: 'سه برابر یک عدد بعلاوه پنج', a: '3x+5', opts: ['3x+5', '5x+3', '3+5x', 'x+35'] },
+        { q: 'دو برابر یک عدد منهای چهار', a: '2x-4', opts: ['2x-4', '4x-2', 'x-24', '2-4x'] },
+        { q: 'یک عدد بعلاوه هفت', a: 'x+7', opts: ['x+7', '7x', 'x-7', '7-x'] },
+        { q: 'پنج برابر یک عدد', a: '5x', opts: ['5x', 'x+5', '5+x', 'x/5'] },
+    ];
+    let exprIdx = 0;
+    function newExprQ() {
+        exprIdx = rand(0, exprQs.length - 1);
+        const q = exprQs[exprIdx];
+        document.getElementById('exprPrompt').textContent = q.q;
+        const shuffled = [...q.opts].sort(() => Math.random() - 0.5);
+        document.getElementById('exprChoices').innerHTML = shuffled.map(o => `<button class="btn btn-accent" onclick="checkExpr('${o}')" dir="ltr">${o}</button>`).join('');
+        document.getElementById('exprFeedback').textContent = '';
+    }
+    function checkExpr(ans) {
+        const fb = document.getElementById('exprFeedback');
+        if (ans === exprQs[exprIdx].a) { fb.textContent = '✅ صحیح!'; fb.style.color = 'var(--success)'; addCorrect(); }
+        else { fb.textContent = '❌ جواب: ' + exprQs[exprIdx].a; fb.style.color = 'var(--danger)'; addWrong(); }
+    }
+
+    // === MODULE 5: EVALUATING ===
+    function evalUpdate() {
+        const x = parseInt(document.getElementById('evalSlider').value);
+        document.getElementById('evalX').textContent = x;
+        document.getElementById('evalSteps').innerHTML = `2(${x}) + 5 = ${2*x} + 5 = <strong>${2*x+5}</strong>`;
+    }
+
+    // === MODULE 6: LIKE TERMS ===
+    let likeTermAnswer = '';
+    function newLikeTerms() {
+        const a = rand(1, 8), b = rand(1, 6), c = rand(1, 5);
+        const sum = a + b - c;
+        document.getElementById('likeTermQ').textContent = `${a}x + ${b}x − ${c}x`;
+        likeTermAnswer = sum + 'x';
+        document.getElementById('likeTermAns').value = '';
+        document.getElementById('likeFeedback').textContent = '';
+    }
+    function checkLikeTerms() {
+        const ans = document.getElementById('likeTermAns').value.replace(/\s/g, '');
+        const fb = document.getElementById('likeFeedback');
+        if (ans === likeTermAnswer) { fb.textContent = '✅ عالی!'; fb.style.color = 'var(--success)'; addCorrect(); }
+        else { fb.textContent = '❌ جواب: ' + likeTermAnswer; fb.style.color = 'var(--danger)'; addWrong(); }
+    }
+
+    // === MODULE 7: DISTRIBUTIVE ===
+    let distAnswer = '';
+    function newDist() {
+        const a = rand(2, 6), b = rand(1, 9), sign = pick(['+', '-']);
+        const expr = `${a}(x${sign}${b})`;
+        const expanded = sign === '+' ? `${a}x+${a*b}` : `${a}x-${a*b}`;
+        distAnswer = expanded;
+        document.getElementById('distExpr').textContent = expr;
+        document.getElementById('distSteps').innerHTML = `${a} × x ${sign} ${a} × ${b} = ${expanded}`;
+        document.getElementById('distAns').value = '';
+        document.getElementById('distFeedback').textContent = '';
+    }
+    function checkDist() {
+        const ans = document.getElementById('distAns').value.replace(/\s/g, '');
+        const fb = document.getElementById('distFeedback');
+        if (ans === distAnswer) { fb.textContent = '✅ آفرین!'; fb.style.color = 'var(--success)'; addCorrect(); }
+        else { fb.textContent = '❌ جواب: ' + distAnswer; fb.style.color = 'var(--danger)'; addWrong(); }
+    }
+
+    // === MODULE 8: BUILDING EQUATIONS ===
+    const buildQs = [
+        { q: 'عددی بعلاوه ۴ برابر ۹ است', a: 'x+4=9', opts: ['x+4=9', 'x-4=9', '4x=9', 'x+9=4'] },
+        { q: 'دو برابر عددی برابر ۱۰ است', a: '2x=10', opts: ['2x=10', 'x+2=10', 'x/2=10', '10x=2'] },
+        { q: 'سه برابر عددی منهای ۱ برابر ۸', a: '3x-1=8', opts: ['3x-1=8', '3x+1=8', 'x-3=8', '3-x=8'] },
+    ];
+    let buildIdx = 0;
+    function newBuildEq() {
+        buildIdx = rand(0, buildQs.length - 1);
+        const q = buildQs[buildIdx];
+        document.getElementById('buildPrompt').textContent = q.q;
+        const shuffled = [...q.opts].sort(() => Math.random() - 0.5);
+        document.getElementById('buildChoices').innerHTML = shuffled.map(o => `<button class="btn btn-accent" onclick="checkBuild('${o}')" dir="ltr">${o}</button>`).join('');
+        document.getElementById('buildFeedback').textContent = '';
+    }
+    function checkBuild(ans) {
+        const fb = document.getElementById('buildFeedback');
+        if (ans === buildQs[buildIdx].a) { fb.textContent = '✅ معادله درست!'; fb.style.color = 'var(--success)'; addCorrect(); }
+        else { fb.textContent = '❌ جواب: ' + buildQs[buildIdx].a; fb.style.color = 'var(--danger)'; addWrong(); }
+    }
+
+    // === MODULE 9: SOLVING EQUATIONS ===
+    let eqData = {};
+    function newEq() {
+        const x = rand(1, 10); const a = rand(1, 4); const b = rand(1, 9);
+        const rhs = a * x + b;
+        eqData = { x, expr: `${a}x + ${b} = ${rhs}` };
+        document.getElementById('eqDisplay').textContent = eqData.expr;
+        document.getElementById('leftSide').textContent = `${a}x + ${b}`;
+        document.getElementById('rightSide').textContent = rhs;
+        document.getElementById('eqAnswer').value = '';
+        document.getElementById('eqFeedback').textContent = '';
+    }
+    function checkEq() {
+        const ans = parseInt(document.getElementById('eqAnswer').value);
+        const fb = document.getElementById('eqFeedback');
+        if (ans === eqData.x) { fb.textContent = '✅ x = ' + eqData.x; fb.style.color = 'var(--success)'; addCorrect(); }
+        else { fb.textContent = '❌ جواب: x = ' + eqData.x; fb.style.color = 'var(--danger)'; addWrong(); }
+    }
+
+    // === MODULE 10: GUESS ===
+    let guessData = {};
+    function newGuess() {
+        const x = rand(1, 20); const a = rand(1, 5); const b = rand(0, 10);
+        guessData = { x, expr: `${a}x + ${b} = ${a * x + b}`, attempts: 0 };
+        document.getElementById('guessEq').textContent = guessData.expr;
+        document.getElementById('guessInput').value = '';
+        document.getElementById('guessHint').textContent = '';
+        document.getElementById('guessAttempts').textContent = '0';
+    }
+    function checkGuess() {
+        const g = parseInt(document.getElementById('guessInput').value);
+        guessData.attempts++;
+        document.getElementById('guessAttempts').textContent = guessData.attempts;
+        const hint = document.getElementById('guessHint');
+        if (g === guessData.x) { hint.textContent = '🎉 درست!'; hint.style.color = 'var(--success)'; addCorrect(); }
+        else if (g < guessData.x) { hint.textContent = '⬆️ بیشتر است'; hint.style.color = 'var(--accent)'; }
+        else { hint.textContent = '⬇️ کمتر است'; hint.style.color = 'var(--accent)'; }
+    }
+
+    // === MODULE 11: AREA ===
+    function updateArea() {
+        const x = parseInt(document.getElementById('areaSlider').value);
+        document.getElementById('areaX').textContent = x;
+        const l = x + 3;
+        document.getElementById('areaL').textContent = l;
+        document.getElementById('areaP').textContent = 2 * (l + 5);
+        document.getElementById('areaA').textContent = l * 5;
+        document.getElementById('rectLabel').textContent = l + ' × 5';
+    }
+
+    // === MODULE 12: MIXED ===
+    let mixedData = {};
+    function newMixed() {
+        const type = rand(0, 3);
+        if (type === 0) { const a = rand(2, 6), b = rand(1, 9); mixedData = { q: `${a}x + ${b} وقتی x=3`, a: String(a*3+b) }; }
+        else if (type === 1) { const a = rand(1, 5), b = rand(1, 5); const s = a + b; mixedData = { q: `ساده کنید: ${a}x + ${b}x`, a: s + 'x' }; }
+        else if (type === 2) { const a = rand(2, 5), b = rand(1, 8); mixedData = { q: `بسط دهید: ${a}(x+${b})`, a: `${a}x+${a*b}` }; }
+        else { const x = rand(1, 10), b = rand(1, 9); mixedData = { q: `حل کنید: x+${b}=${x+b}`, a: String(x) }; }
+        document.getElementById('mixedQ').textContent = mixedData.q;
+        document.getElementById('mixedAns').value = '';
+        document.getElementById('mixedFeedback').textContent = '';
+    }
+    function checkMixed() {
+        const ans = document.getElementById('mixedAns').value.replace(/\s/g, '');
+        const fb = document.getElementById('mixedFeedback');
+        if (ans === mixedData.a) { fb.textContent = '✅ آفرین!'; fb.style.color = 'var(--success)'; addCorrect(); }
+        else { fb.textContent = '❌ جواب: ' + mixedData.a; fb.style.color = 'var(--danger)'; addWrong(); }
+    }
+
+    // === MODULE 13: TEACHER ===
+    let teacherData = {};
+    function teacherGenerate() {
+        const x = rand(1, 12); const a = rand(1, 5); const b = rand(0, 10);
+        teacherData = { q: `${a}x + ${b} = ${a*x+b}`, a: `x = ${x}` };
+        document.getElementById('teacherQ').textContent = 'سؤال: ' + teacherData.q;
+        document.getElementById('teacherA').classList.add('hidden');
+    }
+    function teacherShowAnswer() { document.getElementById('teacherA').textContent = 'جواب: ' + teacherData.a; document.getElementById('teacherA').classList.remove('hidden'); }
+    function teacherHideAnswer() { document.getElementById('teacherA').classList.add('hidden'); }
+
+    // === MODULE 15: BADGES ===
+    const badgeDefs = [
+        { id: 'first', name: '🌟 اولین پاسخ', cond: () => state.correct >= 1 },
+        { id: 'five', name: '🔥 پنج درست', cond: () => state.correct >= 5 },
+        { id: 'ten', name: '💎 ده درست', cond: () => state.correct >= 10 },
+        { id: 'star5', name: '⭐ پنج ستاره', cond: () => state.stars >= 5 },
+        { id: 'level3', name: '🚀 سطح ۳', cond: () => state.level >= 3 },
+    ];
+    function checkBadges() {
+        let newBadge = false;
+        badgeDefs.forEach(b => {
+            if (!state.badges.includes(b.id) && b.cond()) { state.badges.push(b.id); newBadge = true; }
+        });
+        if (newBadge) { showConfetti(); save(); }
+        renderBadges();
+    }
+    function renderBadges() {
+        document.getElementById('badges').innerHTML = badgeDefs.map(b =>
+            `<div class="p-2 px-3 rounded-lg text-sm font-bold" style="background:${state.badges.includes(b.id) ? '#fef3c7' : 'var(--bg)'}; opacity:${state.badges.includes(b.id) ? 1 : 0.4};">${b.name}</div>`
+        ).join('');
+    }
+
+    // === CONFETTI ===
+    function showConfetti() {
+        const canvas = document.getElementById('confettiCanvas');
+        canvas.classList.remove('hidden');
+        canvas.width = window.innerWidth; canvas.height = window.innerHeight;
+        const ctx = canvas.getContext('2d');
+        const particles = Array.from({length: 80}, () => ({
+            x: Math.random() * canvas.width, y: -20, vx: (Math.random() - 0.5) * 6,
+            vy: Math.random() * 4 + 2, color: pick(['#f59e0b','#6366f1','#10b981','#ef4444','#ec4899']),
+            size: Math.random() * 6 + 3
+        }));
+        let frame = 0;
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            particles.forEach(p => { p.x += p.vx; p.y += p.vy; ctx.fillStyle = p.color; ctx.fillRect(p.x, p.y, p.size, p.size); });
+            frame++;
+            if (frame < 90) requestAnimationFrame(animate);
+            else canvas.classList.add('hidden');
+        }
+        animate();
+    }
+
+    // === INIT ===
+    function init() {
+        if (state.dark) document.body.classList.add('dark');
+        if (!state.sound) document.getElementById('soundBtn').textContent = '🔇';
+        updateStats();
+        renderVocab();
+        newPattern();
+        updateVar();
+        newExprQ();
+        evalUpdate();
+        newLikeTerms();
+        newDist();
+        newBuildEq();
+        newEq();
+        newGuess();
+        updateArea();
+        newMixed();
+        teacherGenerate();
+        renderBadges();
+        showModule(state.module);
+    }
+    init();
+    </script>
+ 
+</body></html>
